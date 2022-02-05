@@ -11,16 +11,21 @@ WORKDIR /app
 
 # Copy src files to working dir in Docker image
 #COPY ../../lib lib
-COPY *.go ./
-RUN go mod init github.com/jansemmelink/wasps
+RUN git clone https://github.com/jansemmelink/wasps
+WORKDIR /app/wasps/rest/wasps
 RUN go get .
+RUN go build -o /rest-service
+
+#COPY *.go ./
+#RUN go mod init github.com/jansemmelink/wasps
+#RUN go get .
 
 # Build the application binary 
-RUN go build -o /api-users
+#RUN go build -o /api-users
 
 # Open port to be accesseble outside container
 EXPOSE 19081
 
 # This is the command that will execute when this image
 # is used to start a container
-CMD [ "/wasps"]
+CMD [ "/rest-service"]
